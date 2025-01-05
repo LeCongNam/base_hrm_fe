@@ -28,7 +28,7 @@ import React, { memo, useState } from "react";
 const { Header, Footer, Sider } = Layout;
 const { Search } = Input;
 
-export const sideBarItems = [
+const sideBarItems: any[] = [
   {
     key: "/dashboard",
     label: <Link href="/dashboard">Home</Link>,

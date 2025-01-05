@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 // Base URL của API (thay đổi tuỳ theo project của bạn)
 const BASE_URL =
@@ -15,7 +19,7 @@ const apiClient: AxiosInstance = axios.create({
 
 // Thêm interceptor để xử lý request (e.g., thêm token vào header)
 apiClient.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem("token"); // Lấy token từ localStorage
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
