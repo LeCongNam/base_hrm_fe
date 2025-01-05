@@ -16,9 +16,7 @@ export default function EmployeePage() {
 
   const [api, contextHolder] = notification.useNotification();
 
-  const socket = useSocket(
-    `${process.env.NEXT_PUBLIC_API_URL}:${process.env.PORT_SOCKET}`,
-  );
+  const socket = useSocket(`${process.env.NEXT_PUBLIC_API_URL}`);
   const router = useRouter();
 
   const getList = async (page: number, take: number) => {

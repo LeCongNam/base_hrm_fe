@@ -12,6 +12,7 @@ const useSocket = (
     const socketInstance = io(serverUrl, {
       transports: ["websocket"],
       ...opts,
+      port: process.env.PORT_SOCKET,
     });
 
     setSocket(socketInstance);
