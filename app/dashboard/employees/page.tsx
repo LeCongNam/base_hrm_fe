@@ -17,7 +17,7 @@ export default function EmployeePage() {
   const [api, contextHolder] = notification.useNotification();
 
   const socket = useSocket(
-    process.env.NEXT_PUBLIC_API_URL as unknown as string,
+    `${process.env.NEXT_PUBLIC_API_URL}:${process.env.PORT_SOCKET}`,
   );
   const router = useRouter();
 
