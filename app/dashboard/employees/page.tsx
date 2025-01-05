@@ -16,7 +16,9 @@ export default function EmployeePage() {
 
   const [api, contextHolder] = notification.useNotification();
 
-  const socket = useSocket("http://localhost:3002");
+  const socket = useSocket(
+    process.env.NEXT_PUBLIC_API_URL as unknown as string,
+  );
   const router = useRouter();
 
   const getList = async (page: number, take: number) => {
@@ -33,7 +35,6 @@ export default function EmployeePage() {
           })),
         ]);
         setTotalItems(total);
-        console.log("==================>", total);
         setLoading(false);
       }, 2000); // Delay 2 giây
     } catch (error) {
