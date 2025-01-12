@@ -5,6 +5,7 @@ import InputField from "@/components/InputField";
 import SelectField from "@/components/SelectField";
 import { Department } from "@/types/department.type";
 import { Employee } from "@/types/employee.type";
+import { Office } from "@/types/office.type";
 import { User } from "@/types/user.type";
 import { SendOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Row, Switch } from "antd";
@@ -12,7 +13,8 @@ import { pick } from "lodash-es";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { departmentApi } from "../../departments/service";
+import { departmentDashboardApi } from "../../departments/service";
+import { officeDashboardApi } from "../../offices/service";
 
 export default function FormCreateEmployee() {
   const {
@@ -22,6 +24,7 @@ export default function FormCreateEmployee() {
   } = useForm<Employee & Partial<User>>();
   const [isAutoIncrement, setIsAutoIncrement] = useState(false);
   const [listDepartments, setListDepartments] = useState<Department[]>([]);
+  const [listOffices, setListOffices] = useState<Office[]>([]);
 
   const router = useRouter();
 
@@ -63,8 +66,17 @@ export default function FormCreateEmployee() {
 
   const getListDepartments = async () => {
     try {
-      const { data } = await departmentApi.getList();
+      const { data } = await departmentDashboardApi.getList();
       setListDepartments(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getListOffices = async () => {
+    try {
+      const { data } = await officeDashboardApi.getList();
+      setListOffices(data);
     } catch (e) {
       console.error(e);
     }
@@ -72,6 +84,7 @@ export default function FormCreateEmployee() {
 
   useEffect(() => {
     getListDepartments();
+    getListOffices();
   }, []);
 
   return (
@@ -93,7 +106,7 @@ export default function FormCreateEmployee() {
               control={control}
               rules={{ required: !isAutoIncrement && "Mã nhân sự là bắt buộc" }}
               placeholder="Mã nhân sự"
-              disabled={isAutoIncrement} // Disable input khi auto-increment
+              disabled={isAutoIncrement}
             />
             <Switch
               checked={isAutoIncrement}
@@ -133,10 +146,26 @@ export default function FormCreateEmployee() {
               control={control}
               rules={{ required: "Chức danh hiện tại là bắt buộc" }}
               options={[
-                { value: "1", label: "Developer" },
-                { value: "2", label: "Manager" },
-                { value: "3", label: "Intern" },
+                ...(listDepartments.map((department) => ({
+                  value: department.id,
+                  label: department.name.toUpperCase(),
+                })) as unknown as []),
               ]}
+            />
+          </Col>
+          <Col span={4}>
+            <SelectField
+              name="officeId"
+              label="Văn phòng"
+              control={control}
+              rules={{ required: "Văn phòng là bắt buộc" }}
+              options={[
+                ...(listOffices.map((office) => ({
+                  value: officeid,
+                  label: office.name.toUpperCase(),
+                })) as unknown as []),
+              ]}
+              showSearch
             />
           </Col>
           <Col span={4}>

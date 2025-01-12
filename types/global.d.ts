@@ -5,4 +5,10 @@ declare global {
     take?: number;
     skip?: number;
   };
+
+  type FormProps = {
+    onSubmit: (data) => void;
+    isReset: boolean;
+    onResetDone: () => void;
+  };
 }

@@ -1,20 +1,20 @@
 import apiClient from "@/apis/apiClient";
-import { Department } from "@/types/department.type";
+import { Position } from "@/types/position.type";
 
-export class DepartmentApi {
-  private readonly PREFIX = "departments";
+export class PositionDashboardApi {
+  private readonly PREFIX = "/dashboard/positions";
 
-  async create(data: Department) {
+  async create(data: Position) {
     try {
-      const response = await apiClient.post(`dashboard/${this.PREFIX}`, data);
+      const response = await apiClient.post(this.PREFIX, data);
 
-      return { data: response.data.data, total: response.data.total };
+      return response.data;
     } catch (error) {
       throw new Error(`Error fetching users: ${error}`);
     }
   }
 
-  async getList(payload: TPayloadGetList<Department> = {}) {
+  async getList(payload: TPayloadGetList<Position> = {}) {
     try {
       if (!payload.skip) {
         payload["skip"] = 0;
@@ -23,7 +23,7 @@ export class DepartmentApi {
       if (!payload.take) {
         payload["take"] = 10;
       }
-      const response = await apiClient.get(`dashboard/${this.PREFIX}`, {
+      const response = await apiClient.get(this.PREFIX, {
         params: payload,
       });
 
@@ -36,13 +36,25 @@ export class DepartmentApi {
 
   async updateActive(id: number, isActive: boolean) {
     try {
-      const response = await apiClient.put(`dashboard/${this.PREFIX}/${id}`, {
+      const response = await apiClient.put(`${this.PREFIX}/${id}`, {
         isActive,
       });
 
       return response.data;
     } catch (error) {
       console.error(`Error fetching users: ${error}`);
+      throw new Error(`Error fetching users: ${error}`);
+    }
+  }
+
+  async delete(id: number | undefined) {
+    try {
+      if (!id) return;
+
+      const response = await apiClient.delete(`${this.PREFIX}/${id}`);
+
+      return response.data;
+    } catch (error) {
       throw new Error(`Error fetching users: ${error}`);
     }
   }

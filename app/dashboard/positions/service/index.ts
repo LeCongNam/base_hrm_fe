@@ -1,5 +1,5 @@
-import { PositionApi } from "./position.api";
+import { PositionDashboardApi } from "./position.dashboard.api";
 
-const positionApi = new PositionApi();
+const positionDashboardApi = new PositionDashboardApi();
 
-export { positionApi };
+export { positionDashboardApi };

@@ -1,5 +1,5 @@
-import { DepartmentApi } from "./department.api";
+import { DepartmentDashboardApi } from "./department.dashboard.api";
 
-const departmentApi = new DepartmentApi();
+const departmentDashboardApi = new DepartmentDashboardApi();
 
-export { departmentApi };
+export { departmentDashboardApi };

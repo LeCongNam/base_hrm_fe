@@ -1,39 +1,18 @@
 "use client";
-import { positionApi } from "@/app/dashboard/positions/service";
-import InputField from "@/components/InputField";
-import SwitchField from "@/components/SwitchField";
+import { positionDashboardApi } from "@/app/dashboard/positions/service";
 import { Position } from "@/types/position.type";
-import { DeleteOutlined, EditOutlined, SendOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Modal, Row, Switch, Table, TableProps } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Modal, Switch, Table, TableProps } from "antd";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import FormCreatePosition from "./_components/FormCreatePosition";
 
 export default function PositionPage() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Position>({
-    defaultValues: { isActive: true, description: "" },
-  });
   const [isLoading, setIsLoading] = useState(true);
   const [listPositions, setListPositions] = useState<Position[]>([]);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState<string>("");
   const [idDelete, setIdDelete] = useState<number | undefined>();
-
-  const getList = async (payload: Partial<Position>) => {
-    try {
-      const { data, total } = await positionApi.getList(payload);
-
-      setListPositions(
-        data.map((item: Position) => ({ ...item, key: item.id })),
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   const columns: TableProps<Position>["columns"] = [
     {
@@ -62,7 +41,7 @@ export default function PositionPage() {
           defaultChecked={isActive}
           onChange={async (checked: boolean) => {
             try {
-              const response = await positionApi.updateActive(
+              const response = await positionDashboardApi.updateActive(
                 record.id,
                 checked,
               );
@@ -96,10 +75,22 @@ export default function PositionPage() {
     },
   ];
 
-  const onSubmit = async (data: Position) => {
+  const getList = async (payload: Partial<Position>) => {
+    try {
+      const { data, total } = await positionDashboardApi.getList(payload);
+
+      setListPositions(
+        data.map((item: Position) => ({ ...item, key: item.id })),
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleSubmit = async (data: Position) => {
     try {
       setIsLoading(true);
-      const response: Position = await positionApi.create(data);
+      await positionDashboardApi.create(data);
       getList({});
       setIsLoading(false);
     } catch (err) {
@@ -115,7 +106,7 @@ export default function PositionPage() {
   const handleOk = async () => {
     setModalText("Popup will auto close!!");
     setConfirmLoading(true);
-    await positionApi.delete(idDelete);
+    await positionDashboardApi.delete(idDelete);
     setTimeout(async () => {
       setConfirmLoading(false);
       setOpen(false);
@@ -136,52 +127,7 @@ export default function PositionPage() {
 
   return (
     <div>
-      <Form
-        layout="horizontal"
-        onFinish={handleSubmit(onSubmit)}
-      >
-        <Row gutter={16}>
-          <Col span={8}>
-            <InputField
-              name="name"
-              label="Tên vị trí"
-              control={control}
-              rules={{ required: "tên vị trí là bắt buộc" }}
-              placeholder="name"
-            />
-          </Col>
-          <Col span={8}>
-            <InputField
-              name="description"
-              label="Mô tả"
-              control={control}
-              rules={{ required: "Mô tả là bắt buộc" }}
-              placeholder="description"
-            />
-          </Col>
-
-          <Col span={8}>
-            <SwitchField
-              name="isActive"
-              label="Active Status"
-              control={control}
-              required={true}
-            />
-          </Col>
-        </Row>
-
-        <div className="flex justify-start">
-          <Button
-            type="primary"
-            htmlType="submit"
-            icon={<SendOutlined />}
-            iconPosition="end"
-          >
-            Thêm nhân sự
-          </Button>
-        </div>
-      </Form>
-
+      <FormCreatePosition onSubmit={handleSubmit} />
       <div>
         <Table<Position>
           columns={columns}

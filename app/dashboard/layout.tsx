@@ -1,7 +1,8 @@
 "use client";
 
-import BreadcrumbComponent from "@/app/dashboard/(layouts)/BreadcrumbComponent";
+import BreadcrumbComponent from "@/app/dashboard/_components/BreadcrumbComponent";
 import {
+  ApartmentOutlined,
   AuditOutlined,
   BellOutlined,
   DashboardOutlined,
@@ -23,62 +24,73 @@ import { Content } from "antd/es/layout/layout";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { memo, useState } from "react";
-
-const { Header, Footer, Sider } = Layout;
-const { Search } = Input;
-
-const sideBarItems: any[] = [
-  {
-    key: "/dashboard",
-    label: <Link href="/dashboard">Home</Link>,
-    icon: <DashboardOutlined />,
-  },
-  {
-    key: "/dashboard/employees",
-    label: <Link href="/dashboard/employees">Nhân sự</Link>,
-    icon: <UserOutlined />,
-  },
-  {
-    key: "/dashboard/positions",
-    label: <Link href="/dashboard/positions">Vị trí</Link>,
-    icon: <AuditOutlined />,
-  },
-  {
-    key: "/dashboard/departments",
-    label: <Link href="/dashboard/departments">Phòng ban</Link>,
-    icon: <HomeOutlined />,
-  },
-];
-
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    label: "My Account",
-    disabled: true,
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "2",
-    label: "Profile",
-    extra: "⌘P",
-  },
-  {
-    key: "3",
-    label: "Billing",
-    extra: "⌘B",
-  },
-  {
-    key: "4",
-    label: "Settings",
-    icon: <SettingOutlined />,
-    extra: "⌘S",
-  },
-];
+import React, { useState } from "react";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { Header, Footer, Sider } = Layout;
+  const { Search } = Input;
+
+  const sideBarItems: any[] = [
+    {
+      key: "/dashboard",
+      label: <Link href="/dashboard">Home</Link>,
+      icon: <DashboardOutlined />,
+    },
+    {
+      key: "/dashboard/employees",
+      label: <Link href="/dashboard/employees">Employees</Link>,
+      icon: <UserOutlined />,
+    },
+    {
+      key: "/dashboard/positions",
+      label: <Link href="/dashboard/positions">Positions</Link>,
+      icon: <AuditOutlined />,
+    },
+    {
+      key: "/dashboard/departments",
+      label: <Link href="/dashboard/departments">Departments</Link>,
+      icon: <ApartmentOutlined />,
+    },
+
+    {
+      key: "/dashboard/offices",
+      label: <Link href="/dashboard/offices">Offices</Link>,
+      icon: <HomeOutlined />,
+    },
+    {
+      key: "/dashboard/global-settings",
+      label: <Link href="/dashboard/global-settings">Global Settings</Link>,
+      icon: <SettingOutlined />,
+    },
+  ];
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: "My Account",
+      disabled: true,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "2",
+      label: "Profile",
+      extra: "⌘P",
+    },
+    {
+      key: "3",
+      label: "Billing",
+      extra: "⌘B",
+    },
+    {
+      key: "4",
+      label: "Settings",
+      icon: <SettingOutlined />,
+      extra: "⌘S",
+    },
+  ];
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -217,4 +229,4 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default memo(DashboardLayout);
+export default DashboardLayout;

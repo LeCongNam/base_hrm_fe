@@ -1,20 +1,20 @@
 import apiClient from "@/apis/apiClient";
-import { Position } from "postcss";
+import { Department } from "@/types/department.type";
 
-export class PositionApi {
-  private readonly PREFIX = "/dashboard/positions";
+export class DepartmentDashboardApi {
+  private readonly PREFIX = "dashboard/departments";
 
-  async create(data: Position) {
+  async create(data: Department) {
     try {
       const response = await apiClient.post(this.PREFIX, data);
 
-      return response.data;
+      return { data: response.data.data, total: response.data.total };
     } catch (error) {
       throw new Error(`Error fetching users: ${error}`);
     }
   }
 
-  async getList(payload: TPayloadGetList<Position> = {}) {
+  async getList(payload: TPayloadGetList<Department> = {}) {
     try {
       if (!payload.skip) {
         payload["skip"] = 0;
@@ -43,18 +43,6 @@ export class PositionApi {
       return response.data;
     } catch (error) {
       console.error(`Error fetching users: ${error}`);
-      throw new Error(`Error fetching users: ${error}`);
-    }
-  }
-
-  async delete(id: number | undefined) {
-    try {
-      if (!id) return;
-
-      const response = await apiClient.delete(`${this.PREFIX}/${id}`);
-
-      return response.data;
-    } catch (error) {
       throw new Error(`Error fetching users: ${error}`);
     }
   }

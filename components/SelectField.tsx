@@ -1,4 +1,4 @@
-import { Form, Select } from "antd";
+import { Form, FormItemProps, Select } from "antd";
 import React from "react";
 import {
   Control,
@@ -13,6 +13,7 @@ type SelectOption = {
 };
 
 type SelectFieldProps = {
+  showSearch: boolean;
   name: string;
   label: string;
   control: unknown;
@@ -21,7 +22,7 @@ type SelectFieldProps = {
     "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
   >;
   options: SelectOption[];
-};
+} & FormItemProps;
 
 const SelectField: React.FC<SelectFieldProps> = ({
   name,
@@ -29,6 +30,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
   control,
   rules,
   options,
+  showSearch,
+  ...props
 }: SelectFieldProps) => {
   return (
     <Form.Item
@@ -42,6 +45,17 @@ const SelectField: React.FC<SelectFieldProps> = ({
           <Select
             {...field}
             placeholder={`Chọn ${label.toLowerCase()}`}
+            {...props}
+            showSearch={showSearch}
+            filterOption={
+              showSearch
+                ? (input, record) => {
+                    return record?.children
+                      .toLowerCase()
+                      .includes(input.toLowerCase());
+                  }
+                : true
+            }
           >
             {options.map((option) => (
               <Select.Option
